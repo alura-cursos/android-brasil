@@ -16,35 +16,37 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_formulario_cadastro);
 
         TextInputLayout textInputNomeCompleto = findViewById(R.id.formulario_cadastro_campo_nome_completo);
-        EditText campoNomeCompleto = textInputNomeCompleto.getEditText();
-        adicionaValidacaoPadrao(campoNomeCompleto);
+        adicionaValidacaoPadrao(textInputNomeCompleto);
 
         TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
-        EditText campoCpf = textInputCpf.getEditText();
-        adicionaValidacaoPadrao(campoCpf);
+        adicionaValidacaoPadrao(textInputCpf);
 
         TextInputLayout textInputTelefoneComDdd = findViewById(R.id.formulario_cadastro_campo_telefone_com_ddd);
-        EditText campoTelefoneComDdd = textInputTelefoneComDdd.getEditText();
-        adicionaValidacaoPadrao(campoTelefoneComDdd);
+        adicionaValidacaoPadrao(textInputTelefoneComDdd);
 
         TextInputLayout textInputEmail = findViewById(R.id.formulario_cadastro_campo_email);
-        EditText campoEmail = textInputEmail.getEditText();
-        adicionaValidacaoPadrao(campoEmail);
+        adicionaValidacaoPadrao(textInputEmail);
 
         TextInputLayout textInputSenha = findViewById(R.id.formulario_cadastro_campo_senha);
-        EditText campoSenha = textInputSenha.getEditText();
-        adicionaValidacaoPadrao(campoSenha);
+        adicionaValidacaoPadrao(textInputSenha);
     }
 
-    private void adicionaValidacaoPadrao(final EditText campo) {
+    private void adicionaValidacaoPadrao(final TextInputLayout textInputCampo){
+        final EditText campo = textInputCampo.getEditText();
         campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String texto = campo.getText().toString();
-                if(texto.isEmpty()){
-                    campo.setError("Campo obrigatório");
+                if(!hasFocus){
+                    if(texto.isEmpty()){
+                        textInputCampo.setError("Campo obrigatório");
+                    } else {
+                        textInputCampo.setError(null);
+                        textInputCampo.setErrorEnabled(false);
+                    }
                 }
             }
         });
     }
+
 }
