@@ -42,8 +42,33 @@ public class FormularioCadastroActivity extends AppCompatActivity {
     }
 
     private void configuraCampoCpf() {
-        TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
-        adicionaValidacaoPadrao(textInputCpf);
+        final TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
+        final EditText campoCpf = textInputCpf.getEditText();
+        campoCpf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String cpf = campoCpf.getText().toString();
+                if (!hasFocus) {
+                    if (!validaCampoObrigatorio(cpf, textInputCpf)) return;
+                    if (!validaCampoComOnzeDigitos(cpf, textInputCpf)) return;
+
+                    removeErro(textInputCpf);
+                }
+            }
+        });
+    }
+
+    private void removeErro(TextInputLayout textInputCpf) {
+        textInputCpf.setError(null);
+        textInputCpf.setErrorEnabled(false);
+    }
+
+    private boolean validaCampoComOnzeDigitos(String cpf, TextInputLayout textInputCpf) {
+        if (cpf.length() != 11) {
+            textInputCpf.setError("O CPF precisa ter 11 dígitos");
+            return false;
+        }
+        return true;
     }
 
     private void configuraCampoNomeCompleto() {
@@ -51,26 +76,26 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         adicionaValidacaoPadrao(textInputNomeCompleto);
     }
 
-    private void adicionaValidacaoPadrao(final TextInputLayout textInputCampo){
+    private void adicionaValidacaoPadrao(final TextInputLayout textInputCampo) {
         final EditText campo = textInputCampo.getEditText();
         campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String texto = campo.getText().toString();
-                if(!hasFocus){
-                    validaCampoObrigatorio(texto, textInputCampo);
+                if (!hasFocus) {
+                    if(!validaCampoObrigatorio(texto, textInputCampo)) return;
+                    removeErro(textInputCampo);
                 }
             }
         });
     }
 
-    private void validaCampoObrigatorio(String texto, TextInputLayout textInputCampo) {
-        if(texto.isEmpty()){
+    private boolean validaCampoObrigatorio(String texto, TextInputLayout textInputCampo) {
+        if (texto.isEmpty()) {
             textInputCampo.setError("Campo obrigatório");
-        } else {
-            textInputCampo.setError(null);
-            textInputCampo.setErrorEnabled(false);
+            return false;
         }
+        return true;
     }
 
 }
