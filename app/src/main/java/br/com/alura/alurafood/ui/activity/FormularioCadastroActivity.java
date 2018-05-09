@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import br.com.alura.alurafood.R;
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.validation.InvalidStateException;
 
 public class FormularioCadastroActivity extends AppCompatActivity {
 
@@ -51,11 +53,23 @@ public class FormularioCadastroActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     if (!validaCampoObrigatorio(cpf, textInputCpf)) return;
                     if (!validaCampoComOnzeDigitos(cpf, textInputCpf)) return;
+                    if (!validaCalculoCpf(cpf, textInputCpf)) return;
 
                     removeErro(textInputCpf);
                 }
             }
         });
+    }
+
+    private boolean validaCalculoCpf(String cpf, TextInputLayout textInputCpf) {
+        try {
+            CPFValidator cpfValidator = new CPFValidator();
+            cpfValidator.assertValid(cpf);
+        } catch (InvalidStateException e){
+            textInputCpf.setError("CPF inválido");
+            return false;
+        }
+        return true;
     }
 
     private void removeErro(TextInputLayout textInputCpf) {
