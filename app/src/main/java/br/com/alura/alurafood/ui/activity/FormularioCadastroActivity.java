@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import br.com.alura.alurafood.R;
+import br.com.alura.alurafood.validator.ValidaCpf;
 import br.com.alura.alurafood.validator.ValidacaoPadrao;
 import br.com.caelum.stella.format.CPFFormatter;
 import br.com.caelum.stella.validation.CPFValidator;
@@ -50,18 +51,13 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         final TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
         final EditText campoCpf = textInputCpf.getEditText();
         final CPFFormatter cpfFormatter = new CPFFormatter();
-        final ValidacaoPadrao validador = new ValidacaoPadrao(textInputCpf);
+        final ValidaCpf validador = new ValidaCpf(textInputCpf);
         campoCpf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String cpf = campoCpf.getText().toString();
                 if (!hasFocus) {
-                    if (!validador.estaValido()) return;
-                    if (!validaCampoComOnzeDigitos(cpf, textInputCpf)) return;
-                    if (!validaCalculoCpf(cpf, textInputCpf)) return;
-
-                    String cpfFormatado = cpfFormatter.format(cpf);
-                    campoCpf.setText(cpfFormatado);
+                    validador.estaValido();
                 } else {
                     try {
                         String cpfSemFormato = cpfFormatter.unformat(cpf);
@@ -74,25 +70,6 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validaCalculoCpf(String cpf, TextInputLayout textInputCpf) {
-        try {
-            CPFValidator cpfValidator = new CPFValidator();
-            cpfValidator.assertValid(cpf);
-        } catch (InvalidStateException e){
-            textInputCpf.setError("CPF inválido");
-            return false;
-        }
-        return true;
-    }
-
-
-    private boolean validaCampoComOnzeDigitos(String cpf, TextInputLayout textInputCpf) {
-        if (cpf.length() != 11) {
-            textInputCpf.setError("O CPF precisa ter 11 dígitos");
-            return false;
-        }
-        return true;
-    }
 
     private void configuraCampoNomeCompleto() {
         TextInputLayout textInputNomeCompleto = findViewById(R.id.formulario_cadastro_campo_nome_completo);
