@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import br.com.alura.alurafood.R;
+import br.com.alura.alurafood.validator.ValidacaoPadrao;
 import br.com.caelum.stella.format.CPFFormatter;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
@@ -49,16 +50,15 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         final TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
         final EditText campoCpf = textInputCpf.getEditText();
         final CPFFormatter cpfFormatter = new CPFFormatter();
+        final ValidacaoPadrao validador = new ValidacaoPadrao(textInputCpf);
         campoCpf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String cpf = campoCpf.getText().toString();
                 if (!hasFocus) {
-                    if (!validaCampoObrigatorio(cpf, textInputCpf)) return;
+                    if (!validador.estaValido()) return;
                     if (!validaCampoComOnzeDigitos(cpf, textInputCpf)) return;
                     if (!validaCalculoCpf(cpf, textInputCpf)) return;
-
-                    removeErro(textInputCpf);
 
                     String cpfFormatado = cpfFormatter.format(cpf);
                     campoCpf.setText(cpfFormatado);
@@ -85,10 +85,6 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         return true;
     }
 
-    private void removeErro(TextInputLayout textInputCpf) {
-        textInputCpf.setError(null);
-        textInputCpf.setErrorEnabled(false);
-    }
 
     private boolean validaCampoComOnzeDigitos(String cpf, TextInputLayout textInputCpf) {
         if (cpf.length() != 11) {
@@ -105,24 +101,17 @@ public class FormularioCadastroActivity extends AppCompatActivity {
 
     private void adicionaValidacaoPadrao(final TextInputLayout textInputCampo) {
         final EditText campo = textInputCampo.getEditText();
+        final ValidacaoPadrao validador = new ValidacaoPadrao(textInputCampo);
         campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String texto = campo.getText().toString();
                 if (!hasFocus) {
-                    if(!validaCampoObrigatorio(texto, textInputCampo)) return;
-                    removeErro(textInputCampo);
+                    if(!validador.estaValido()) return;
                 }
             }
         });
     }
 
-    private boolean validaCampoObrigatorio(String texto, TextInputLayout textInputCampo) {
-        if (texto.isEmpty()) {
-            textInputCampo.setError("Campo obrigatório");
-            return false;
-        }
-        return true;
-    }
+
 
 }
