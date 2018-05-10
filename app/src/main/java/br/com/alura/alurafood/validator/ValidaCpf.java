@@ -10,6 +10,8 @@ import br.com.caelum.stella.validation.InvalidStateException;
 
 public class ValidaCpf {
 
+    public static final String CPF_INVALIDO = "CPF inválido";
+    public static final String DEVE_TER_ONZE_DIGITOS = "O CPF precisa ter 11 dígitos";
     private final TextInputLayout textInputCpf;
     private final EditText campoCpf;
     private final ValidacaoPadrao validadorPadrao;
@@ -21,22 +23,20 @@ public class ValidaCpf {
         this.validadorPadrao = new ValidacaoPadrao(textInputCpf);
     }
 
-    private boolean validaCalculoCpf() {
-        String cpf = getCpf();
+    private boolean validaCalculoCpf(String cpf) {
         try {
             CPFValidator cpfValidator = new CPFValidator();
             cpfValidator.assertValid(cpf);
         } catch (InvalidStateException e){
-            textInputCpf.setError("CPF inválido");
+            textInputCpf.setError(CPF_INVALIDO);
             return false;
         }
         return true;
     }
 
-    private boolean validaCampoComOnzeDigitos() {
-        String cpf = getCpf();
+    private boolean validaCampoComOnzeDigitos(String cpf) {
         if (cpf.length() != 11) {
-            textInputCpf.setError("O CPF precisa ter 11 dígitos");
+            textInputCpf.setError(DEVE_TER_ONZE_DIGITOS);
             return false;
         }
         return true;
@@ -44,14 +44,14 @@ public class ValidaCpf {
 
     public boolean estaValido(){
         if(!validadorPadrao.estaValido()) return false;
-        if(!validaCampoComOnzeDigitos()) return false;
-        if(!validaCalculoCpf()) return false;
-        adicionaFormatacao();
+        String cpf = getCpf();
+        if(!validaCampoComOnzeDigitos(cpf)) return false;
+        if(!validaCalculoCpf(cpf)) return false;
+        adicionaFormatacao(cpf);
         return true;
     }
 
-    private void adicionaFormatacao() {
-        String cpf = getCpf();
+    private void adicionaFormatacao(String cpf) {
         String cpfFormatado = formatador.format(cpf);
         campoCpf.setText(cpfFormatado);
     }

@@ -16,11 +16,12 @@ import br.com.caelum.stella.validation.InvalidStateException;
 
 public class FormularioCadastroActivity extends AppCompatActivity {
 
+    private static final String ERRO_FORMATAO_CPF = "erro formatação cpf";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_cadastro);
-
         inicializaCampos();
     }
 
@@ -48,26 +49,30 @@ public class FormularioCadastroActivity extends AppCompatActivity {
     }
 
     private void configuraCampoCpf() {
-        final TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
+        TextInputLayout textInputCpf = findViewById(R.id.formulario_cadastro_campo_cpf);
         final EditText campoCpf = textInputCpf.getEditText();
-        final CPFFormatter cpfFormatter = new CPFFormatter();
+        final CPFFormatter formatador = new CPFFormatter();
         final ValidaCpf validador = new ValidaCpf(textInputCpf);
         campoCpf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String cpf = campoCpf.getText().toString();
-                if (!hasFocus) {
-                    validador.estaValido();
+                if (hasFocus) {
+                    adicionaFormatacao(formatador, campoCpf);
                 } else {
-                    try {
-                        String cpfSemFormato = cpfFormatter.unformat(cpf);
-                        campoCpf.setText(cpfSemFormato);
-                    } catch (IllegalArgumentException e){
-                        Log.e("erro formatação cpf", e.getMessage());
-                    }
+                    validador.estaValido();
                 }
             }
         });
+    }
+
+    private void adicionaFormatacao(CPFFormatter formatador, EditText campoCpf) {
+        String cpf = campoCpf.getText().toString();
+        try {
+            String cpfSemFormato = formatador.unformat(cpf);
+            campoCpf.setText(cpfSemFormato);
+        } catch (IllegalArgumentException e){
+            Log.e(ERRO_FORMATAO_CPF, e.getMessage());
+        }
     }
 
 
@@ -83,7 +88,7 @@ public class FormularioCadastroActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(!validador.estaValido()) return;
+                    validador.estaValido();
                 }
             }
         });
