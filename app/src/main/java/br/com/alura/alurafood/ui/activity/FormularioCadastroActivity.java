@@ -10,6 +10,7 @@ import android.widget.EditText;
 import br.com.alura.alurafood.R;
 import br.com.alura.alurafood.formatter.FormataTelefoneComDdd;
 import br.com.alura.alurafood.validator.ValidaCpf;
+import br.com.alura.alurafood.validator.ValidaEmail;
 import br.com.alura.alurafood.validator.ValidaTelefoneComDdd;
 import br.com.alura.alurafood.validator.ValidacaoPadrao;
 import br.com.caelum.stella.format.CPFFormatter;
@@ -40,7 +41,16 @@ public class FormularioCadastroActivity extends AppCompatActivity {
 
     private void configuraCampoEmail() {
         TextInputLayout textInputEmail = findViewById(R.id.formulario_cadastro_campo_email);
-        adicionaValidacaoPadrao(textInputEmail);
+        EditText campoEmail = textInputEmail.getEditText();
+        final ValidaEmail validador = new ValidaEmail(textInputEmail);
+        campoEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    validador.estaValido();
+                }
+            }
+        });
     }
 
     private void configuraCampoTelefoneComDdd() {
