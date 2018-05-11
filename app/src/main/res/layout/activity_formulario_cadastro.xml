@@ -41,6 +41,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapWords"
                 android:hint="Nome completo" />
         </android.support.design.widget.TextInputLayout>
 
@@ -56,6 +57,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="CPF" />
         </android.support.design.widget.TextInputLayout>
 
@@ -71,6 +73,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="Telefone com DDD" />
         </android.support.design.widget.TextInputLayout>
 
@@ -86,6 +89,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 android:hint="E-mail" />
         </android.support.design.widget.TextInputLayout>
 
@@ -94,6 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:passwordToggleEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/formulario_cadastro_campo_email"
             app:layout_constraintStart_toStartOf="@+id/formulario_cadastro_campo_email"
             app:layout_constraintTop_toBottomOf="@+id/formulario_cadastro_campo_email">
@@ -101,6 +106,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="Senha" />
         </android.support.design.widget.TextInputLayout>
 
