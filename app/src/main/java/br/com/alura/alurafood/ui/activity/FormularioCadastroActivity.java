@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import br.com.alura.alurafood.R;
 import br.com.alura.alurafood.formatter.FormataTelefoneComDdd;
@@ -32,6 +34,16 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         configuraCampoTelefoneComDdd();
         configuraCampoEmail();
         configuraCampoSenha();
+        Button botaoCadastrar = findViewById(R.id.formulario_cadastro_botao_cadastrar);
+        botaoCadastrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(
+                        FormularioCadastroActivity.this,
+                        "Cadastro realizado com sucesso!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void configuraCampoSenha() {
