@@ -3,7 +3,7 @@ package br.com.alura.alurafood.validator;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
-public class ValidacaoPadrao {
+public class ValidacaoPadrao implements Validador{
 
     private static final String CAMPO_OBRIGATORIO = "Campo obrigatório";
     private final TextInputLayout textInputCampo;
@@ -23,6 +23,7 @@ public class ValidacaoPadrao {
         return true;
     }
 
+    @Override
     public boolean estaValido(){
         if(!validaCampoObrigatorio()) return false;
         removeErro();

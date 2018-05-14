@@ -9,17 +9,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.alura.alurafood.R;
 import br.com.alura.alurafood.formatter.FormataTelefoneComDdd;
 import br.com.alura.alurafood.validator.ValidaCpf;
 import br.com.alura.alurafood.validator.ValidaEmail;
 import br.com.alura.alurafood.validator.ValidaTelefoneComDdd;
 import br.com.alura.alurafood.validator.ValidacaoPadrao;
+import br.com.alura.alurafood.validator.Validador;
 import br.com.caelum.stella.format.CPFFormatter;
 
 public class FormularioCadastroActivity extends AppCompatActivity {
 
     private static final String ERRO_FORMATAO_CPF = "erro formatação cpf";
+    private final List<Validador> validadores = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +43,21 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(
-                        FormularioCadastroActivity.this,
-                        "Cadastro realizado com sucesso!",
-                        Toast.LENGTH_SHORT).show();
+                boolean formularioEstaValido = true;
+                for (Validador validador :
+                        validadores) {
+                    if(!validador.estaValido()){
+                        formularioEstaValido = false;
+                    }
+                }
+
+                if(formularioEstaValido){
+                    Toast.makeText(
+                            FormularioCadastroActivity.this,
+                            "Cadastro realizado com sucesso!",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -55,6 +71,7 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         TextInputLayout textInputEmail = findViewById(R.id.formulario_cadastro_campo_email);
         EditText campoEmail = textInputEmail.getEditText();
         final ValidaEmail validador = new ValidaEmail(textInputEmail);
+        validadores.add(validador);
         campoEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -69,6 +86,7 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         TextInputLayout textInputTelefoneComDdd = findViewById(R.id.formulario_cadastro_campo_telefone_com_ddd);
         final EditText campoTelefoneComDdd = textInputTelefoneComDdd.getEditText();
         final ValidaTelefoneComDdd validador = new ValidaTelefoneComDdd(textInputTelefoneComDdd);
+        validadores.add(validador);
         final FormataTelefoneComDdd formatador = new FormataTelefoneComDdd();
         campoTelefoneComDdd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -91,6 +109,7 @@ public class FormularioCadastroActivity extends AppCompatActivity {
         final EditText campoCpf = textInputCpf.getEditText();
         final CPFFormatter formatador = new CPFFormatter();
         final ValidaCpf validador = new ValidaCpf(textInputCpf);
+        validadores.add(validador);
         campoCpf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -122,6 +141,7 @@ public class FormularioCadastroActivity extends AppCompatActivity {
     private void adicionaValidacaoPadrao(final TextInputLayout textInputCampo) {
         final EditText campo = textInputCampo.getEditText();
         final ValidacaoPadrao validador = new ValidacaoPadrao(textInputCampo);
+        validadores.add(validador);
         campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

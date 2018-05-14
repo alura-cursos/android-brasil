@@ -3,7 +3,7 @@ package br.com.alura.alurafood.validator;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
-public class ValidaEmail {
+public class ValidaEmail implements Validador{
 
     private final TextInputLayout textInputEmail;
     private final EditText campoEmail;
@@ -23,6 +23,7 @@ public class ValidaEmail {
         return false;
     }
 
+    @Override
     public boolean estaValido(){
         if(!validadorPadrao.estaValido()) return false;
         String email = campoEmail.getText().toString();
